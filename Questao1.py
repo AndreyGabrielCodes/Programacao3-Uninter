@@ -76,8 +76,7 @@ class ListaEncadeadaPacientes:
         """Retira o primeiro paciente da fila e imprime chamada para atendimento"""
 
         if not self.head:
-            print("Não existentes pacientes na fila para chamar no momento!")
-            return
+            raise("Não existentes pacientes na fila para chamar no momento!")
 
         paciente_atendido = self.head
 
@@ -117,4 +116,38 @@ def inserir():
     print(f'Inserido paciente de senha {paciente_novo.numero} e cor {paciente_novo.cor} ({retorna_descricao_cor(paciente_novo.cor)})')
 
 
-#aqui será feito o MAIN
+#Main
+print('Sistema de fila de pacientes com e sem prioridade')
+print('Andrey Gabriel de Andrade Moraes')
+print('4731589')
+
+while True:
+
+    try:
+        print('')
+        print('1 - Adicionar paciente a fila')
+        print('2 - Mostrar pacientes na fila')
+        print('3 - Chamar paciente')
+        print('4 - Sair')
+        print('')
+
+        opcao = input('Informe a opção desejada: ')
+
+        print('')
+
+        match opcao:
+            case 1:
+                inserir()
+            case 2:
+                FilaPacientes.imprimirListaEspera()
+            case 3:
+                FilaPacientes.atenderPaciente()
+            case 4:
+                break
+            case _: 
+                raise ValueError('Opção escolhida não existe, tente novamente')
+
+    except Exception as e:
+        print(e)
+    else:
+        print('Encerrando sistema...')   
