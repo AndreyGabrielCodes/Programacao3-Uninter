@@ -1,119 +1,120 @@
 #FEITO POR ANDREY GABRIEL DE ANDRADE MORAES
 #4731589
 
-class No:
-    def __init__(self, conteudo):
-        self.conteudo = conteudo
+LETRA_PRIORIDADE = 'A'
+LETRA_SEMPRIORIDADE = 'V'
+COR_PRIORIDADE = 'Amarelo'
+COR_SEMPRIORIDAE = 'Verde'
+
+SenhaAtualPrioridade = 201
+SenhaAtualSemPrioridade = 1
+
+def retorna_senha_cor(prioridade):
+    if prioridade == LETRA_PRIORIDADE:
+        retorno = SenhaAtualPrioridade
+        SenhaAtualPrioridade += SenhaAtualPrioridade
+        return retorno;
+    elif prioridade == LETRA_SEMPRIORIDADE:
+        retorno = SenhaAtualSemPrioridade
+        SenhaAtualSemPrioridade += SenhaAtualSemPrioridade
+        return retorno;
+
+def retorna_descricao_cor(prioridade):
+    if prioridade == LETRA_PRIORIDADE:
+        return COR_PRIORIDADE;
+    elif prioridade == LETRA_SEMPRIORIDADE:
+        return COR_SEMPRIORIDAE;
+
+class NoSenhaPaciente:
+    def __init__(self,cor):
+        self.cor = cor
+        self.numero = retorna_senha_cor(cor)
         self.proximo = None
 
-class ListaEncadeada:
+class ListaEncadeadaPacientes:
     
     def __init__(self):
         self.head = None
 
-    def inserir_inicio(self,conteudo):
-        novo_no = No(conteudo)
-        novo_no.proximo = self.head
-        self.head = novo_no
-
-    def inserir_fim(self,conteudo):
-        novo_no = No(conteudo)
+    def inserirSemPrioridade(self,no_novo):
+        """Insere ao final da lista"""
 
         #Caso a lista não possua conteudo
         if not self.head:
-            self.head = novo_no
+            self.head = no_novo
             return
 
         atual = self.head
         while atual.proximo:
             atual = atual.proximo
-        atual.proximo = novo_no
+        atual.proximo = no_novo
 
-    def inserir_antes_de(self,conteudo_alvo,conteudo_novo):
-        """Insere conteudo_novo antes de conteudo alvo
-        Retorna True se conseguiu encontrar o alvo e inserir ou False se não encontrou o alvo"""
+        print('Paciente sem prioridade inserido!')
+
+    def inserirComPrioridade(self,no_novo):
+        """Insere o nó de prioridade após todos os nós de prioridade já existentes"""
+
+        #Lista vazia ou com head sem prioridade
+        if not self.head or self.head.prioridade == LETRA_SEMPRIORIDADE:
+            no_novo.proximo = self.head
+            self.head = no_novo
+            print('Paciente com prioridade inserido!')
+            return
+
+        atual = self.head
+
+        while atual.proximo and atual.proximo.prioridade == LETRA_PRIORIDADE:
+            atual = atual.proximo
+
+        #Insere o novo conteudo após o ultimo nó de prioridade encontrado
+        no_novo.proximo = atual.proximo
+        atual.proximo = no_novo
+
+        print('Paciente com prioridade inserido!')
+
+    def atenderPaciente(self):
+        """Retira o primeiro paciente da fila e imprime chamada para atendimento"""
 
         if not self.head:
-            return False
+            print("Não existentes pacientes na fila para chamar no momento!")
+            return
 
-        #Se o alvo é o head da lista
-        if self.head.conteudo == conteudo_alvo:
-            self.inserir_inicio(conteudo_novo)
-            return True
+        paciente_atendido = self.head
 
-        atual = self.head
-        anterior = None
+        #Retira o primeiro paciente e faz a lista apontar para o próximo
+        self.head = self.head.proximo
 
-        #Procura o conteudo alvo mantendo o anterior
-        while atual and atual.conteudo != conteudo_alvo:
-            anterior = atual
-            atual = atual.proximo
+        mensagem = f"Atendendo o paciente cor {paciente_atendido.cor} ({retorna_descricao_cor(paciente_atendido.cor)}) e número {paciente_atendido.numero}"
+        print(mensagem)
 
-        #Se não foi encontrado conteudo alvo
-        if not atual:
-            return False
-
-        #Conecta o conteudo novo entre o anterior e o atual
-        novo_no = No(conteudo_novo)
-        novo_no.proximo = atual
-        anterior.proximo = novo_no
-
-        return True
-
-
-    def inserir_depois_de(self,conteudo_alvo,conteudo_novo):
-        """Insere conteudo_novo depois de conteudo alvo
-        Retorna True se conseguiu encontrar o alvo e inserir ou False se não encontrou o alvo"""
-
-        atual = self.head
-
-        #Procura o conteudo alvo
-        while atual and atual.conteudo != conteudo_alvo:
-            atual = atual.proximo
-
-        #Se não foi encontrado conteudo alvo
-        if not atual:
-            return False
-
-        #Conecta o conteudo novo entre o anterior e o atual
-        novo_no = No(conteudo_novo)
-        novo_no.proximo = atual.proximo
-        atual.proximo = novo_no
-
-        return True
-
-    def remover_no(self,conteudo):
-        """Retorna True quando conseguiu retirar ou False quando não encontrou o conteudo a retirar"""
-
-        atual = self.head
-
-        #Caso o conteudo a retirar seja o head
-        if atual and atual.conteudo == conteudo:
-            self.head = atual.proximo
-            return True
-
-        anterior = None
-        while atual and atual.conteudo != conteudo:
-            anterior = atual
-            atual = atual.proximo
-
-        #Se não foi encontrado conteudo
-        if not atual:
-            return False
-
-        #Desconecta o no da lista
-        anterior.proximo = atual.proximo
-
-        return True
-
-    def listar(self):
+    def imprimirListaEspera(self):
         elementos_listagem = []
         atual = self.head
 
         while atual:
-            elementos_listagem.append(str(atual.conteudo))
+            elementos_listagem(f"[{atual.prioridade},{atual.numero}]")
             atual = atual.proximo
 
-        return elementos_listagem
+        print("Lista -> " + " ".join(elementos_listagem))
 
-FilaPacientes = ListaEncadeada()
+FilaPacientes = ListaEncadeadaPacientes()
+
+def inserir():
+
+    prioridade = input(f"Informe a cor/prioridade da senha ({LETRA_PRIORIDADE}/{LETRA_SEMPRIORIDADE}): ")
+    prioridade.upper()
+
+    if prioridade not in (LETRA_PRIORIDADE,LETRA_SEMPRIORIDADE):
+        raise ValueError("Prioridade informada não existe!")
+
+    paciente_novo = NoSenhaPaciente(prioridade)
+
+    if prioridade == LETRA_SEMPRIORIDADE:
+        FilaPacientes.inserirSemPrioridade(paciente_novo)
+    else:
+        FilaPacientes.inserirComPrioridade(paciente_novo)
+
+    print(f'Inserido paciente de senha {paciente_novo.numero} e cor {paciente_novo.cor} ({retorna_descricao_cor(paciente_novo.cor)})')
+
+
+#aqui será feito o MAIN
