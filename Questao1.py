@@ -29,9 +29,9 @@ def retorna_descricao_cor(prioridade):
         return COR_SEM_PRIORIDADE;
 
 class NoSenhaPaciente:
-    def __init__(self,cor):
+    def __init__(self,cor,numero):
         self.cor = cor
-        self.numero = retorna_senha_cor(cor)
+        self.numero = numero
         self.proximo = None
 
 class ListaEncadeadaPacientes:
@@ -42,12 +42,9 @@ class ListaEncadeadaPacientes:
     def inserirSemPrioridade(self,no_novo):
         """Insere ao final da lista"""
 
-        #Caso a lista não possua conteudo
-        if not self.head:
-            self.head = no_novo
-            return
-
         atual = self.head
+        #Anda pela lista a partir do head
+        #Em seguida insere ao final
         while atual.proximo:
             atual = atual.proximo
         atual.proximo = no_novo
@@ -57,15 +54,10 @@ class ListaEncadeadaPacientes:
     def inserirComPrioridade(self,no_novo):
         """Insere o nó de prioridade após todos os nós de prioridade já existentes"""
 
-        #Lista vazia ou com head sem prioridade
-        if not self.head or self.head.cor == LETRA_COR_SEM_PRIORIDADE:
-            no_novo.proximo = self.head
-            self.head = no_novo
-            print('\nPaciente com prioridade inserido!')
-            return
-
         atual = self.head
 
+        #Anda pela lista a partir do head
+        #Em seguida insere após todos os elementos de prioridade
         while atual.proximo and atual.proximo.cor == LETRA_COR_PRIORIDADE:
             atual = atual.proximo
 
@@ -74,6 +66,47 @@ class ListaEncadeadaPacientes:
         atual.proximo = no_novo
 
         print('\nPaciente com prioridade inserido!')
+
+    def inserir(self):
+
+        global SenhaAtualPrioridade, SenhaAtualSemPrioridade
+
+        print('\nMENU - OPÇÕES DE SENHA')
+        print(f'{LETRA_COR_PRIORIDADE} = {COR_PRIORIDADE} - Com prioridade')
+        print(f'{LETRA_COR_SEM_PRIORIDADE} =  {COR_SEM_PRIORIDADE}  - Sem prioridade')
+        print('')
+
+        prioridade = input(f"Informe a cor/prioridade da senha ({LETRA_COR_PRIORIDADE}/{LETRA_COR_SEM_PRIORIDADE}): ").upper()
+
+        if prioridade not in (LETRA_COR_PRIORIDADE,LETRA_COR_SEM_PRIORIDADE):
+            raise Exception("Prioridade informada não existe!")
+
+        senha_paciente = 0
+
+        #Atribui automaticamente a senha conforme global
+        if prioridade == LETRA_COR_PRIORIDADE:
+            senha_paciente = SenhaAtualPrioridade
+            SenhaAtualPrioridade += 1
+        elif prioridade == LETRA_COR_SEM_PRIORIDADE:
+            senha_paciente = SenhaAtualSemPrioridade
+            SenhaAtualSemPrioridade += 1
+
+        paciente_novo = NoSenhaPaciente(prioridade, senha_paciente)
+
+        #Caso a lista esteja vazia insere primeiro
+        #Caso o primeiro da lista seja sem prioridade e vá ser inserido uma prioridade, insere prioridade no head
+        #Caso a lista esteja com valor insere conforme prioridade
+        if not self.head:
+            self.head = paciente_novo
+        elif self.head.cor == LETRA_COR_SEM_PRIORIDADE and prioridade == LETRA_COR_PRIORIDADE:
+            paciente_novo.proximo = self.head
+            self.head = paciente_novo
+        elif prioridade == LETRA_COR_PRIORIDADE:
+            FilaPacientes.inserirComPrioridade(paciente_novo)
+        elif prioridade == LETRA_COR_SEM_PRIORIDADE:
+            FilaPacientes.inserirSemPrioridade(paciente_novo)
+
+        print(f'\nInserido paciente de senha {paciente_novo.numero} e cor {paciente_novo.cor} ({retorna_descricao_cor(paciente_novo.cor)})')
 
     def atenderPaciente(self):
         """Retira o primeiro paciente da fila e imprime chamada para atendimento"""
@@ -90,6 +123,7 @@ class ListaEncadeadaPacientes:
         print(mensagem)
 
     def imprimirListaEspera(self):
+        """Imprime todos os pacientes a partir do primeiro"""
 
         if not self.head:
             raise Exception("Não existentes pacientes na fila no momento!")
@@ -104,29 +138,6 @@ class ListaEncadeadaPacientes:
         print("\nLista -> " + " ".join(elementos_listagem))
 
 FilaPacientes = ListaEncadeadaPacientes()
-
-def inserir():
-
-    print('\nMENU - OPÇÕES DE SENHA')
-    print(f'{LETRA_COR_PRIORIDADE} = {COR_PRIORIDADE} - Com prioridade')
-    print(f'{LETRA_COR_SEM_PRIORIDADE} =  {COR_SEM_PRIORIDADE}  - Sem prioridade')
-    print('')
-
-    prioridade = input(f"Informe a cor/prioridade da senha ({LETRA_COR_PRIORIDADE}/{LETRA_COR_SEM_PRIORIDADE}): ")
-    prioridade = prioridade.upper()
-
-    if prioridade not in (LETRA_COR_PRIORIDADE,LETRA_COR_SEM_PRIORIDADE):
-        raise Exception("Prioridade informada não existe!")
-
-    paciente_novo = NoSenhaPaciente(prioridade)
-
-    if prioridade == LETRA_COR_SEM_PRIORIDADE:
-        FilaPacientes.inserirSemPrioridade(paciente_novo)
-    else:
-        FilaPacientes.inserirComPrioridade(paciente_novo)
-
-    print(f'\nInserido paciente de senha {paciente_novo.numero} e cor {paciente_novo.cor} ({retorna_descricao_cor(paciente_novo.cor)})')
-
 
 #Main
 print('Sistema de fila de pacientes com e sem prioridade')
@@ -148,7 +159,7 @@ while True:
 
         match opcao:
             case '1':
-                inserir()
+                FilaPacientes.inserir()
             case '2':
                 FilaPacientes.imprimirListaEspera()
             case '3':
