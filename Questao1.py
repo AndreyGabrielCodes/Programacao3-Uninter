@@ -49,8 +49,6 @@ class ListaEncadeadaPacientes:
             atual = atual.proximo
         atual.proximo = no_novo
 
-        print('\nPaciente sem prioridade inserido!')
-
     def inserirComPrioridade(self,no_novo):
         """Insere o nó de prioridade após todos os nós de prioridade já existentes"""
 
@@ -64,8 +62,6 @@ class ListaEncadeadaPacientes:
         #Insere o novo conteudo após o ultimo nó de prioridade encontrado
         no_novo.proximo = atual.proximo
         atual.proximo = no_novo
-
-        print('\nPaciente com prioridade inserido!')
 
     def inserir(self):
 
