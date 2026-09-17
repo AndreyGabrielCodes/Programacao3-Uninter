@@ -6,9 +6,12 @@ SIGLA_ESTADO_DISTRITO_FEDERAL = 'DF'
 def retorna_ascii(caractere):
     """Retorna o número do caractere conforme a Tabela ASCII
     Ex.: a=97, j=106, U=117, etc"""
-    bytes = caractere.encode('utf-32-be')
-    bytes = int.from_bytes(bytes,byteorder='big')
-    return bytes
+    try:
+        bytes = caractere.encode('utf-32-be')
+        bytes = int.from_bytes(bytes,byteorder='big')
+        return bytes
+    except Exception:
+        raise Exception("Valor informado não existe na Tabela ASCII!")
 
 class No_Estado():
 
@@ -42,17 +45,14 @@ class Tabela_Hash():
         # Extrai a posição conforme a tabela ASCII
         posicao = self.hash(sigla_estado.upper())
         novo_estado = No_Estado(sigla_estado, nome_estado)
+        head_atual = self.tabela[posicao]
 
-        #Insere no inicio, para virar o novo head
-        
-        #A FAZER criar aqui a inserção do estado no inicio
-
+        #Pega quem está atualmente no head, faz o novo estado apontar para esse head
+        novo_estado.proximo = head_atual
+        self.tabela[posicao] = novo_estado
 
     #Pergunta a responder: o nome do estado tem que ser impresso ? no exemplo não está
     def imprimir_estados(self):
-
-        if not self.tabela:
-            raise Exception("Não existentes estados inseridos na lista!")
 
         print(f'LISTAGEM DE ESTADOS POR POSIÇÃO')
         for posicao in range(10):
@@ -64,10 +64,13 @@ class Tabela_Hash():
                 while atual is not None:
                     elementos.append(f'{atual.sigla}')
                     atual = atual.proximo
+
+                    if atual.proximo is None:
+                        elementos.append(' -> None')
             else:
                 elementos.append('None')
 
-            print(f'Posição {posicao}: {' ->'.join(elementos)} -> None')
+            print(f'Posição {posicao}: {' ->'.join(elementos)}')
 
 
 lista_estados_brasil = [('AC','Acre'),('AL','Alagoas'),('AP','Amapá'),('AM','Amazonas'),('BA','Bahia'),('CE','Ceará'),('DF','Distrito Federal'),
