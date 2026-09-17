@@ -98,9 +98,9 @@ class ListaEncadeadaPacientes:
             paciente_novo.proximo = self.head
             self.head = paciente_novo
         elif prioridade == LETRA_COR_PRIORIDADE:
-            FilaPacientes.inserirComPrioridade(paciente_novo)
+            self.inserirComPrioridade(paciente_novo)
         elif prioridade == LETRA_COR_SEM_PRIORIDADE:
-            FilaPacientes.inserirSemPrioridade(paciente_novo)
+            self.inserirSemPrioridade(paciente_novo)
 
         print(f'\nInserido paciente de senha {paciente_novo.numero} e cor {paciente_novo.cor} ({retorna_descricao_cor(paciente_novo.cor)})')
 
