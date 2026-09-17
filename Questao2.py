@@ -55,6 +55,7 @@ class Tabela_Hash():
     def imprimir_estados(self):
 
         print(f'LISTAGEM DE ESTADOS POR POSIÇÃO')
+        print('-'*60)
         for posicao in range(10):
 
             atual = self.tabela[posicao]
@@ -65,17 +66,18 @@ class Tabela_Hash():
                     elementos.append(f'{atual.sigla}')
                     atual = atual.proximo
 
-                    if atual.proximo is None:
-                        elementos.append(' -> None')
+                    #Adiciona None quando encontrar o ultimo estado existente na lista
+                    if atual is None:
+                        elementos.append('None')
             else:
                 elementos.append('None')
 
-            print(f'Posição {posicao}: {' ->'.join(elementos)}')
-
+            print(f'Posição {posicao}: {' -> '.join(elementos)}')
+        print('-'*60)
 
 lista_estados_brasil = [('AC','Acre'),('AL','Alagoas'),('AP','Amapá'),('AM','Amazonas'),('BA','Bahia'),('CE','Ceará'),('DF','Distrito Federal'),
                         ('ES','Espírito Santo'),('GO','Goiás'),('MA','Maranhão'),('MT','Mato Grosso'),('MS','Mato Grosso do Sul'),('MG','Minas Gerais'),
-                        ('PA','Para'),('PB','Paraíba'),('PR','Paraná'),('PE','Pernambuco'),('Pi','piauí'),('RJ','Rio de Janeiro'),
+                        ('PA','Para'),('PB','Paraíba'),('PR','Paraná'),('PE','Pernambuco'),('PI','Piauí'),('RJ','Rio de Janeiro'),
                         ('RN','Rio Grande do Norte'),('RS','Rio Grande do Sul'),('RO','Rondônia'),('RR','Roraima'),('SC','Santa Catarina'),
                         ('SP','São Paulo'), ('SE','Sergipe'),('TO','Tocantins'),]
 
@@ -86,4 +88,25 @@ print('Sistema de emplacamento de veiculos')
 print('Andrey Gabriel de Andrade Moraes')
 print('4731589')
 
+#Mostra que não há estados inseridos
 tabela_estados.imprimir_estados()
+
+#Separa visualmente as listagens
+print('\r')
+
+#Preenche os valores
+for sigla_estado, nome_estado in lista_estados_brasil:
+    tabela_estados.inserir_estado(sigla_estado, nome_estado)
+
+#Mostra os estados preenchidos
+tabela_estados.imprimir_estados()
+
+#Preenche estado fictício com o meu nome
+tabela_estados.inserir_estado('AM','Andrey Gabriel de Andrade Moraes')
+
+#Separa visualmente as listagens
+print('\r')
+
+#Mostra os estados preenchidos com o fictício
+tabela_estados.imprimir_estados()
+
