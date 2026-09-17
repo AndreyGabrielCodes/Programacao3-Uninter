@@ -20,6 +20,7 @@ class No_Estado():
 class Tabela_Hash():
 
     def __init__(self):
+        """Instancia a lista já com 10 posições vazias"""
         self.tabela = []
         for i in range(10):
             self.tabela.append(None)
@@ -37,6 +38,37 @@ class Tabela_Hash():
 
         return posicao
 
+    def inserir_estado(self, sigla_estado, nome_estado):
+        # Extrai a posição conforme a tabela ASCII
+        posicao = self.hash(sigla_estado.upper())
+        novo_estado = No_Estado(sigla_estado, nome_estado)
+
+        #Insere no inicio, para virar o novo head
+        
+        #A FAZER criar aqui a inserção do estado no inicio
+
+
+    #Pergunta a responder: o nome do estado tem que ser impresso ? no exemplo não está
+    def imprimir_estados(self):
+
+        if not self.tabela:
+            raise Exception("Não existentes estados inseridos na lista!")
+
+        print(f'LISTAGEM DE ESTADOS POR POSIÇÃO')
+        for posicao in range(10):
+
+            atual = self.tabela[posicao]
+            elementos = []
+
+            if atual is not None:
+                while atual is not None:
+                    elementos.append(f'{atual.sigla}')
+                    atual = atual.proximo
+            else:
+                elementos.append('None')
+
+            print(f'Posição {posicao}: {' ->'.join(elementos)} -> None')
+
 
 lista_estados_brasil = [('AC','Acre'),('AL','Alagoas'),('AP','Amapá'),('AM','Amazonas'),('BA','Bahia'),('CE','Ceará'),('DF','Distrito Federal'),
                         ('ES','Espírito Santo'),('GO','Goiás'),('MA','Maranhão'),('MT','Mato Grosso'),('MS','Mato Grosso do Sul'),('MG','Minas Gerais'),
@@ -50,3 +82,5 @@ tabela_estados = Tabela_Hash()
 print('Sistema de emplacamento de veiculos')
 print('Andrey Gabriel de Andrade Moraes')
 print('4731589')
+
+tabela_estados.imprimir_estados()
