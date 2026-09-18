@@ -86,7 +86,7 @@ tabela_estados = Tabela_Hash()
 #Main
 print('Sistema de emplacamento de veiculos')
 print('Andrey Gabriel de Andrade Moraes')
-print('4731589')
+print('4731589\n')
 
 #Mostra que não há estados inseridos
 tabela_estados.imprimir_estados()
