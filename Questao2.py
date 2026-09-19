@@ -42,8 +42,11 @@ class Tabela_Hash():
         return posicao
 
     def inserir_estado(self, sigla_estado, nome_estado):
+        #Deixa em caixa alta para evitar problemas de posição por informar minusculo
+        sigla_estado = sigla_estado.upper()
+
         # Extrai a posição conforme a tabela ASCII
-        posicao = self.hash(sigla_estado.upper())
+        posicao = self.hash(sigla_estado)
         novo_estado = No_Estado(sigla_estado, nome_estado)
         head_atual = self.tabela[posicao]
 
@@ -101,7 +104,10 @@ for sigla_estado, nome_estado in lista_estados_brasil:
 #Mostra os estados preenchidos
 tabela_estados.imprimir_estados()
 
-#Preenche estado fictício com o meu nome
+#Preenche estado fictício com o meu nome e sobrenome
+#Conforme conversado com o Prof Bruno Kostiuk por Tutoria, meu nome e sobrenome gera AM (Andrey Moraes), 
+# que é um estado já existente (Amazonas), o que gera duplicidade na inserção/impressão,
+# entretanto ele comentou que isto não é um problema e que pode permanecer assim
 tabela_estados.inserir_estado('AM','Andrey Gabriel de Andrade Moraes')
 
 #Separa visualmente as listagens
